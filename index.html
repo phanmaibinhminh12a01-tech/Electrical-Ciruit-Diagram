@@ -3,32 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý Sơ đồ Tủ điện</title>
+    <title>Hệ Thống Quản Lý Sơ Đồ Điện | IDI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: sans-serif; margin: 0; padding: 20px; background: #f4f4f9; text-align: center; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        h2 { color: #2c3e50; }
-        .diagram-container { margin-top: 20px; border: 2px solid #eee; overflow: hidden; border-radius: 5px; }
-        img { max-width: 100%; height: auto; cursor: zoom-in; }
-        .info { text-align: left; margin-top: 15px; font-size: 0.9em; color: #666; }
+        :root {
+            --primary-color: #0056b3;
+            --bg-color: #f8f9fa;
+        }
+        body { font-family: 'Roboto', sans-serif; background: var(--bg-color); margin: 0; padding: 0; }
+        header { background: var(--primary-color); color: white; padding: 20px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        
+        .search-container { text-align: center; margin: 20px; }
+        #searchInput { padding: 10px; width: 80%; max-width: 400px; border-radius: 20px; border: 1px solid #ddd; }
+
+        .grid-container { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+            gap: 20px; padding: 20px; max-width: 1200px; margin: auto;
+        }
+        .card { 
+            background: white; border-radius: 10px; overflow: hidden; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: 0.3s;
+        }
+        .card:hover { transform: scale(1.02); }
+        .card-content { padding: 15px; }
+        .status-tag { background: #28a745; color: white; padding: 3px 8px; border-radius: 5px; font-size: 0.8em; }
+        
+        .btn-view { 
+            display: block; text-align: center; background: var(--primary-color); 
+            color: white; padding: 10px; text-decoration: none; border-radius: 5px; margin-top: 10px;
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>Sơ Đồ Tủ Điện: MSB-01</h2>
-    <div class="info">
-        <p><strong>Vị trí:</strong> Khu vực Xử lý 1</p>
-        <p><strong>Cập nhật lần cuối:</strong> 10/05/2026</p>
+<header>
+    <h1>HỆ THỐNG SƠ ĐỒ ĐIỆN NHÀ MÁY</h1>
+    <p>Trạm Kỹ Thuật - Kỹ sư: Bình Minh</p>
+</header>
+
+<div class="search-container">
+    <input type="text" id="searchInput" onkeyup="filterTus()" placeholder="Tìm tên tủ điện...">
+</div>
+
+<div class="grid-container" id="tuGrid">
+    <div class="card">
+        <div class="card-content">
+            <span class="status-tag">Hoạt động tốt</span>
+            <h3>Tủ Sao - Tam Giác 01</h3>
+            <p>📍 Khu vực: Bơm nước thải</p>
+            <p>📅 Cập nhật: 10/05/2026</p>
+            <a href="machsaotamgiac.png" target="_blank" class="btn-view">XEM SƠ ĐỒ</a>
+        </div>
     </div>
 
-    <div class="diagram-container">
-        <!-- Thay link ảnh sơ đồ của bạn vào đây -->
-        <img src="machsaotamgiac.png" alt="Sơ đồ tủ điện">
+    <div class="card">
+        <div class="card-content">
+            <span class="status-tag" style="background:#ffc107">Đang bảo trì</span>
+            <h3>Tủ Động Lực MSB-02</h3>
+            <p>📍 Khu vực: Máy nén khí</p>
+            <p>📅 Cập nhật: 01/05/2026</p>
+            <a href="duong-dan-anh-khac.jpg" target="_blank" class="btn-view">XEM SƠ ĐỒ</a>
+        </div>
     </div>
-    
-    <p style="margin-top:20px;"><em>Ghi chú: Phóng to trình duyệt để xem chi tiết.</em></p>
 </div>
+
+<script>
+    // Hàm tìm kiếm nhanh cho anh em kỹ thuật
+    function filterTus() {
+        let input = document.getElementById('searchInput').value.toUpperCase();
+        let cards = document.getElementsByClassName('card');
+        for (let i = 0; i < cards.length; i++) {
+            let title = cards[i].getElementsByTagName('h3')[0];
+            if (title.innerText.toUpperCase().indexOf(input) > -1) {
+                cards[i].style.display = "";
+            } else {
+                cards[i].style.display = "none";
+            }
+        }
+    }
+</script>
 
 </body>
 </html>
