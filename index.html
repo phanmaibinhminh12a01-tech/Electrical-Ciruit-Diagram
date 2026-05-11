@@ -3,65 +3,185 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ Thống Quản Lý Sơ Đồ Điện | IDI</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>Sơ Đồ Mạch Điện - Công Nghệ Tự Động Hóa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary-color: #0056b3; --bg-color: #f8f9fa; }
-        body { font-family: 'Roboto', sans-serif; background: var(--bg-color); margin: 0; padding: 0; }
-        header { background: var(--primary-color); color: white; padding: 20px; text-align: center; }
-        .search-container { text-align: center; margin: 20px; }
-        #searchInput { padding: 12px; width: 80%; max-width: 400px; border-radius: 25px; border: 1px solid #ddd; outline: none; }
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px; max-width: 1200px; margin: auto; }
-        .card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: 0.3s; }
-        .card:hover { transform: translateY(-5px); }
-        .card-img { width: 100%; height: 150px; object-fit: cover; background: #eee; border-bottom: 1px solid #eee; }
-        .card-content { padding: 15px; }
-        .status-tag { background: #28a745; color: white; padding: 3px 8px; border-radius: 5px; font-size: 0.8em; }
-        .btn-view { display: block; text-align: center; background: var(--primary-color); color: white; padding: 10px; text-decoration: none; border-radius: 5px; margin-top: 10px; font-weight: bold; }
+        :root {
+            --bg-dark: #003140;
+            --accent-deep: #00587C;
+            --accent-bright: #00ABFD;
+            --light-blue: #CDF1FF;
+            --text-white: #ffffff;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-dark);
+            background-image: radial-gradient(circle at 50% 50%, #004d63 0%, #003140 100%);
+            color: var(--text-white);
+            margin: 0;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 2px solid var(--accent-bright);
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            margin: 0;
+            color: var(--light-blue);
+            text-shadow: 0 0 10px var(--accent-bright);
+        }
+
+        .search-bar {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        #searchInput {
+            background: rgba(205, 241, 255, 0.1);
+            border: 1px solid var(--accent-bright);
+            padding: 10px 20px;
+            border-radius: 25px;
+            color: var(--light-blue);
+            width: 80%;
+            max-width: 500px;
+            outline: none;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .card {
+            background: rgba(0, 88, 124, 0.4);
+            border: 1px solid var(--accent-deep);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .card:hover {
+            border-color: var(--accent-bright);
+            box-shadow: 0 0 20px rgba(0, 171, 253, 0.4);
+            transform: translateY(-5px);
+        }
+
+        .card-img {
+            width: 100%;
+            height: 150px;
+            background: #004d63;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .card-img img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .card-title {
+            background: var(--light-blue);
+            color: var(--bg-dark);
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.9em;
+            text-transform: uppercase;
+        }
+
+        /* Thẻ thêm sơ đồ */
+        .card-add {
+            border: 2px dashed var(--accent-bright);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px;
+            color: var(--accent-bright);
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .card-add:hover { background: rgba(0, 171, 253, 0.1); }
+        .plus-icon { font-size: 40px; margin-bottom: 10px; }
+
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 0.8em;
+            color: var(--accent-deep);
+        }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>HỆ THỐNG SƠ ĐỒ ĐIỆN NHÀ MÁY</h1>
-    <p>Trạm Kỹ Thuật - Kỹ sư: Bình Minh</p>
+    <h1>SƠ ĐỒ MẠCH ĐIỆN</h1>
 </header>
 
-<div class="search-container">
-    <input type="text" id="searchInput" onkeyup="filterTus()" placeholder="Tìm tên tủ điện hoặc khu vực...">
+<div class="search-bar">
+    <input type="text" id="searchInput" onkeyup="filterCards()" placeholder="Tìm kiếm hệ thống...">
 </div>
 
-<div class="grid-container" id="tuGrid">
-    <div class="card">
-        <img src="machsaotamgiac.png" class="card-img" alt="Thumbnail">
-        <div class="card-content">
-            <span class="status-tag">Hoạt động tốt</span>
-            <h3>Tủ Sao - Tam Giác 01</h3>
-            <p>📍 Khu vực: Bơm nước thải</p>
-            <p>📅 Cập nhật: 10/05/2026</p>
-            <a href="machsaotamgiac.png" target="_blank" class="btn-view">XEM SƠ ĐỒ CHI TIẾT</a>
-        </div>
+<div class="grid-container" id="mainGrid">
+    <div class="card" onclick="window.open('machsaotamgiac.png', '_blank')">
+        <div class="card-img"><img src="machsaotamgiac.png" alt="Băng tải"></div>
+        <div class="card-title">Hệ thống Băng tải</div>
     </div>
 
     <div class="card">
-        <div style="height:150px; background:#ddd; display:flex; align-items:center; justify-content:center; color:#666;">Chưa có ảnh</div>
-        <div class="card-content">
-            <span class="status-tag" style="background:#ffc107">Đang bảo trì</span>
-            <h3>Tủ Động Lực MSB-02</h3>
-            <p>📍 Khu vực: Máy nén khí</p>
-            <p>📅 Cập nhật: 01/05/2026</p>
-            <a href="#" class="btn-view" style="background:#6c757d">CHƯA CẬP NHẬT</a>
-        </div>
+        <div class="card-img"><img src="https://via.placeholder.com/150/004d63/CDF1FF?text=PLC+S7-1200" alt="PLC"></div>
+        <div class="card-title">Tủ PLC Siemens S7-1200</div>
     </div>
+
+    <div class="card">
+        <div class="card-img"><img src="https://via.placeholder.com/150/004d63/CDF1FF?text=Robot+Arm" alt="Robot"></div>
+        <div class="card-title">Mạch Điều khiển Robot</div>
+    </div>
+
+    <div class="card">
+        <div class="card-img"><img src="https://via.placeholder.com/150/004d63/CDF1FF?text=Temp+Control" alt="Nhiệt độ"></div>
+        <div class="card-title">Sơ đồ Đo nhiệt độ</div>
+    </div>
+
+    <a href="https://github.com/phanmaibinhminh12a01-tech/Electrical-Ciruit-Diagram/upload/main" class="card card-add" target="_blank">
+        <div class="plus-icon">+</div>
+        <div>Thêm Sơ đồ</div>
+    </a>
 </div>
+
+<footer>
+    <p>Designer Vietnam | Hệ thống quản lý kỹ thuật IDI</p>
+</footer>
 
 <script>
-    function filterTus() {
+    function filterCards() {
         let input = document.getElementById('searchInput').value.toUpperCase();
         let cards = document.getElementsByClassName('card');
         for (let i = 0; i < cards.length; i++) {
-            let content = cards[i].innerText.toUpperCase();
-            cards[i].style.display = content.indexOf(input) > -1 ? "" : "none";
+            let title = cards[i].innerText.toUpperCase();
+            if (title.indexOf(input) > -1) {
+                cards[i].style.display = "";
+            } else {
+                cards[i].style.display = "none";
+            }
         }
     }
 </script>
