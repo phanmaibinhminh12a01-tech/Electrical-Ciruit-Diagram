@@ -3,152 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IDI Automation Dashboard</title>
+    <title>Hệ Thống Sơ Đồ Mạch Điện | IDI</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-deep: #001a22;
-            --bg-glow: #003d4d;
-            --accent: #00abfd;
-            --text-cyan: #cdf1ff;
+            --bg-dark: #003140;
+            --accent-blue: #00ABFD;
+            --light-cyan: #CDF1FF;
+            --glass: rgba(0, 49, 64, 0.7);
         }
 
         body {
             margin: 0; padding: 0;
             font-family: 'Roboto', sans-serif;
-            background-color: var(--bg-deep);
-            /* TẠO NỀN PHỨC HỢP GIỐNG ẢNH THIẾT KẾ */
-            background-image: 
-                radial-gradient(circle at 50% 50%, var(--bg-glow) 0%, var(--bg-deep) 100%),
-                url('https://www.transparenttextures.com/patterns/carbon-fibre.png'); /* Lớp vân carbon */
+            background-color: var(--bg-dark);
+            /* SỬ DỤNG ẢNH NỀN MÌNH VỪA TẠO */
+            background-image: linear-gradient(rgba(0, 49, 64, 0.8), rgba(0, 49, 64, 0.8)), url('bg-hmi.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             color: white;
             min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        /* TẠO CÁC ĐƯỜNG MẠCH ĐIỆN ẢO (DÙNG CODE CSS) */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: 
-                linear-gradient(rgba(0, 171, 253, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 171, 253, 0.05) 1px, transparent 1px);
-            background-size: 50px 50px; /* Lưới tọa độ kỹ thuật */
-            z-index: -1;
         }
 
         header {
             text-align: center;
-            padding: 60px 0 20px;
+            padding: 50px 20px 10px;
         }
 
         header h1 {
             font-family: 'Orbitron', sans-serif;
-            font-size: 3.5rem;
+            font-size: 2.5rem;
             color: white;
-            letter-spacing: 10px;
-            text-shadow: 0 0 20px var(--accent), 0 0 40px var(--accent);
+            letter-spacing: 5px;
+            text-transform: uppercase;
             margin: 0;
+            text-shadow: 0 0 15px var(--accent-blue);
         }
 
+        /* Thanh tìm kiếm dẹt và mờ đúng kiểu HMI */
         .search-container {
             text-align: center;
-            margin: 40px 0;
+            margin: 30px 0 50px;
         }
 
         #searchInput {
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--accent);
-            padding: 15px 30px;
-            border-radius: 5px;
-            width: 400px;
-            color: var(--text-cyan);
-            font-family: 'Orbitron';
+            background: rgba(205, 241, 255, 0.1);
+            border: 1px solid var(--accent-blue);
+            padding: 10px 25px;
+            border-radius: 20px;
+            width: 450px;
+            max-width: 80%;
+            color: var(--light-cyan);
             outline: none;
-            box-shadow: inset 0 0 10px rgba(0, 171, 253, 0.2);
+            backdrop-filter: blur(5px);
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 25px;
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
 
-        /* CARD THEO PHONG CÁCH "CYBER" CỦA BẠN */
+        /* Thẻ Card đúng phong cách hình mẫu */
         .card {
-            background: rgba(205, 241, 255, 0.05);
-            border: 1px solid rgba(0, 171, 253, 0.3);
-            border-radius: 4px; /* Bo góc nhẹ theo phong cách công nghiệp */
+            background: var(--glass);
+            border: 1px solid rgba(0, 171, 253, 0.4);
+            border-radius: 8px;
             overflow: hidden;
-            transition: 0.3s;
-            backdrop-filter: blur(10px);
-            position: relative;
-        }
-
-        /* Hiệu ứng góc vuông của card */
-        .card::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 10px; height: 10px;
-            border-top: 2px solid var(--accent);
-            border-left: 2px solid var(--accent);
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
         }
 
         .card:hover {
-            background: rgba(0, 171, 253, 0.1);
-            box-shadow: 0 0 30px rgba(0, 171, 253, 0.3);
-            transform: scale(1.02);
+            transform: translateY(-5px);
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 20px rgba(0, 171, 253, 0.4);
         }
 
         .card-img {
-            height: 180px;
+            height: 160px;
+            background: rgba(255, 255, 255, 0.9); /* Nền trắng cho ảnh sơ đồ nổi bật */
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 10px;
         }
 
         .card-img img {
             max-width: 100%;
             max-height: 100%;
-            filter: drop-shadow(0 0 10px var(--accent));
+            object-fit: contain;
         }
 
         .card-label {
-            background: var(--text-cyan);
-            color: #00242e;
-            padding: 15px;
+            background: var(--light-cyan);
+            color: #003140;
+            padding: 12px;
             text-align: center;
-            font-weight: bold;
+            font-weight: 700;
             text-transform: uppercase;
-            font-size: 0.9rem;
-            border-top: 1px solid var(--accent);
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
         }
 
-        /* NÚT THÊM SƠ ĐỒ */
+        /* Thẻ thêm mới */
         .add-card {
+            border: 2px dashed var(--accent-blue);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            border: 2px dashed var(--accent);
-            color: var(--accent);
+            min-height: 215px;
+            color: var(--accent-blue);
             text-decoration: none;
-            min-height: 245px;
+            background: rgba(0, 171, 253, 0.05);
         }
 
-        .add-card:hover { background: rgba(0, 171, 253, 0.1); color: white; }
+        .add-card:hover {
+            background: rgba(0, 171, 253, 0.15);
+            color: white;
+        }
 
         footer {
             text-align: center;
-            padding: 40px;
-            opacity: 0.4;
-            font-size: 0.8rem;
+            padding: 60px 20px;
+            opacity: 0.5;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
         }
     </style>
 </head>
@@ -159,27 +146,51 @@
     </header>
 
     <div class="search-container">
-        <input type="text" id="searchInput" placeholder="SCANNING SYSTEM...">
+        <input type="text" id="searchInput" onkeyup="filter()" placeholder="Tìm kiếm hệ thống thiết bị...">
     </div>
 
-    <div class="grid">
+    <div class="grid" id="mainGrid">
         <div class="card" onclick="window.open('machsaotamgiac.png')">
-            <div class="card-img"><img src="machsaotamgiac.png" alt="Băng tải"></div>
+            <div class="card-img">
+                <img src="machsaotamgiac.png" alt="Băng tải">
+            </div>
             <div class="card-label">Hệ thống Băng tải</div>
         </div>
 
         <div class="card">
-            <div class="card-img"><div style="color:#555">S7-1200_DATA</div></div>
+            <div class="card-img">
+                <div style="color:#aaa; font-size: 12px;">[ PLC S7-1200 ]</div>
+            </div>
             <div class="card-label">Tủ PLC Siemens S7-1200</div>
         </div>
 
-        <a href="#" class="card add-card">
-            <div style="font-size: 40px;">+</div>
-            <div>THÊM HỆ THỐNG</div>
+        <div class="card">
+            <div class="card-img">
+                <div style="color:#aaa; font-size: 12px;">[ ROBOT ARM ]</div>
+            </div>
+            <div class="card-label">Mạch Điều khiển Robot</div>
+        </div>
+
+        <a href="https://github.com/phanmaibinhminh12a01-tech/Electrical-Circuit-Diagram/upload/main" class="card add-card">
+            <div style="font-size: 40px; margin-bottom: 5px;">+</div>
+            <div style="font-weight: bold;">THÊM SƠ ĐỒ</div>
         </a>
     </div>
 
-    <footer>DESIGNER VIETNAM | IDI FACTORY AUTOMATION 2026</footer>
+    <footer>
+        DESIGNER VIETNAM | IDI FACTORY AUTOMATION 2026
+    </footer>
+
+    <script>
+        function filter() {
+            let val = document.getElementById('searchInput').value.toLowerCase();
+            let cards = document.getElementsByClassName('card');
+            for (let card of cards) {
+                let txt = card.innerText.toLowerCase();
+                card.style.display = txt.includes(val) ? "" : "none";
+            }
+        }
+    </script>
 
 </body>
 </html>
