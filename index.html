@@ -3,31 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sơ Đồ Mạch Điện - Công Nghệ Tự Động Hóa</title>
+    <title>Sơ Đồ Mạch Điện - IDI Factory Automation</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         :root {
+            /* Bảng màu chính thức từ thiết kế của bạn */
             --bg-dark: #003140;
             --accent-deep: #00587C;
             --accent-bright: #00ABFD;
             --light-blue: #CDF1FF;
             --text-white: #ffffff;
+            --card-bg: rgba(205, 241, 255, 0.05); /* Nền thẻ mờ */
         }
 
         body {
             font-family: 'Roboto', sans-serif;
             background-color: var(--bg-dark);
-            background-image: radial-gradient(circle at 50% 50%, #004d63 0%, #003140 100%);
+            /* Tạo hiệu ứng nền lưới kỹ thuật nhẹ */
+            background-image: 
+                linear-gradient(rgba(0, 49, 64, 0.9), rgba(0, 26, 34, 1)),
+                url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
             color: var(--text-white);
             margin: 0;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
+        /* --- Header: SƠ ĐỒ MẠCH ĐIỆN --- */
         header {
+            width: 100%;
+            max-width: 1200px;
             text-align: center;
-            padding: 20px 0;
+            padding: 30px 0;
             border-bottom: 2px solid var(--accent-bright);
-            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 171, 253, 0.3); /* Bóng neon */
+            margin-bottom: 40px;
         }
 
         h1 {
@@ -36,98 +48,141 @@
             text-transform: uppercase;
             margin: 0;
             color: var(--light-blue);
-            text-shadow: 0 0 10px var(--accent-bright);
+            text-shadow: 0 0 15px var(--accent-bright);
+            font-size: 2.5em;
         }
 
+        /* --- Thanh tìm kiếm --- */
         .search-bar {
-            text-align: center;
-            margin-bottom: 30px;
+            width: 80%;
+            max-width: 500px;
+            margin-bottom: 40px;
         }
 
         #searchInput {
+            width: 100%;
             background: rgba(205, 241, 255, 0.1);
-            border: 1px solid var(--accent-bright);
-            padding: 10px 20px;
+            border: 1px solid var(--accent-deep);
+            padding: 12px 20px;
             border-radius: 25px;
             color: var(--light-blue);
-            width: 80%;
-            max-width: 500px;
+            font-size: 1em;
             outline: none;
+            transition: 0.3s;
         }
 
+        #searchInput:focus {
+            border-color: var(--accent-bright);
+            box-shadow: 0 0 10px rgba(0, 171, 253, 0.5);
+        }
+
+        /* --- Lưới hiển thị thẻ (Grid) --- */
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            width: 100%;
             max-width: 1200px;
-            margin: auto;
+            padding: 20px;
+            box-sizing: border-box;
         }
 
+        /* --- Định dạng Thẻ (Card) chuyên nghiệp --- */
         .card {
-            background: rgba(0, 88, 124, 0.4);
+            background: var(--card-bg);
             border: 1px solid var(--accent-deep);
-            border-radius: 10px;
+            border-radius: 12px;
             overflow: hidden;
-            transition: all 0.3s ease;
+            transition: all 0.3s ease-out;
             cursor: pointer;
-            position: relative;
+            backdrop-filter: blur(5px); /* Hiệu ứng làm mờ nền sau thẻ */
+            -webkit-backdrop-filter: blur(5px);
+            display: flex;
+            flex-direction: column;
         }
 
+        /* Hiệu ứng khi di chuột vào thẻ */
         .card:hover {
             border-color: var(--accent-bright);
-            box-shadow: 0 0 20px rgba(0, 171, 253, 0.4);
-            transform: translateY(-5px);
+            box-shadow: 0 0 25px rgba(0, 171, 253, 0.6);
+            transform: translateY(-8px);
         }
 
+        /* Phần chứa ảnh sơ đồ */
         .card-img {
             width: 100%;
-            height: 150px;
-            background: #004d63;
+            height: 180px;
+            background: rgba(0, 49, 64, 0.5);
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 10px;
+            padding: 15px;
             box-sizing: border-box;
+            border-bottom: 1px solid rgba(205, 241, 255, 0.1);
         }
 
         .card-img img {
             max-width: 100%;
             max-height: 100%;
-            object-fit: contain;
+            object-fit: contain; /* Giữ nguyên tỷ lệ sơ đồ */
+            filter: drop-shadow(0 0 5px var(--light-blue)); /* Làm sơ đồ "sáng" lên */
         }
 
-        .card-title {
-            background: var(--light-blue);
-            color: var(--bg-dark);
-            padding: 10px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 0.9em;
+        /* Khi không có ảnh, hiện chữ placeholder */
+        .no-img {
+            color: #555;
+            font-size: 0.8em;
             text-transform: uppercase;
         }
 
-        /* Thẻ thêm sơ đồ */
+        /* Phần chứa tiêu đề thẻ (Nền màu xanh nhạt) */
+        .card-title {
+            background: var(--light-blue);
+            color: var(--bg-dark);
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.95em;
+            text-transform: uppercase;
+            margin-top: auto; /* Đẩy tiêu đề xuống đáy thẻ */
+        }
+
+        /* --- Thẻ "Thêm Sơ đồ" đặc biệt --- */
         .card-add {
-            border: 2px dashed var(--accent-bright);
+            border: 2px dashed rgba(0, 171, 253, 0.5);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 200px;
+            min-height: 232px; /* Bằng chiều cao các thẻ khác */
             color: var(--accent-bright);
             font-weight: bold;
             text-decoration: none;
+            background: rgba(0, 171, 253, 0.02);
         }
 
-        .card-add:hover { background: rgba(0, 171, 253, 0.1); }
-        .plus-icon { font-size: 40px; margin-bottom: 10px; }
+        .card-add:hover {
+            background: rgba(0, 171, 253, 0.1);
+            border-style: solid;
+        }
 
+        .plus-icon {
+            font-size: 50px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px var(--accent-bright);
+        }
+
+        /* --- Footer --- */
         footer {
-            margin-top: 50px;
+            margin-top: 60px;
+            padding: 20px;
             text-align: center;
             font-size: 0.8em;
-            color: var(--accent-deep);
+            color: rgba(205, 241, 255, 0.3);
+            border-top: 1px solid rgba(205, 241, 255, 0.1);
+            width: 80%;
         }
+
     </style>
 </head>
 <body>
@@ -137,27 +192,35 @@
 </header>
 
 <div class="search-bar">
-    <input type="text" id="searchInput" onkeyup="filterCards()" placeholder="Tìm kiếm hệ thống...">
+    <input type="text" id="searchInput" onkeyup="filterCards()" placeholder="Tìm kiếm hệ thống hoặc thiết bị...">
 </div>
 
 <div class="grid-container" id="mainGrid">
     <div class="card" onclick="window.open('machsaotamgiac.png', '_blank')">
-        <div class="card-img"><img src="machsaotamgiac.png" alt="Băng tải"></div>
+        <div class="card-img">
+            <img src="machsaotamgiac.png" alt="Sơ đồ Băng tải">
+        </div>
         <div class="card-title">Hệ thống Băng tải</div>
     </div>
 
     <div class="card">
-        <div class="card-img"><img src="https://via.placeholder.com/150/004d63/CDF1FF?text=PLC+S7-1200" alt="PLC"></div>
+        <div class="card-img">
+            <div class="no-img">Chưa có ảnh (Upload tu-plc.png)</div>
+        </div>
         <div class="card-title">Tủ PLC Siemens S7-1200</div>
     </div>
 
     <div class="card">
-        <div class="card-img"><img src="https://via.placeholder.com/150/004d63/CDF1FF?text=Robot+Arm" alt="Robot"></div>
+        <div class="card-img">
+            <div class="no-img">Chưa có ảnh (Upload mach-robot.png)</div>
+        </div>
         <div class="card-title">Mạch Điều khiển Robot</div>
     </div>
 
     <div class="card">
-        <div class="card-img"><img src="https://via.placeholder.com/150/004d63/CDF1FF?text=Temp+Control" alt="Nhiệt độ"></div>
+        <div class="card-img">
+            <div class="no-img">Chưa có ảnh (Upload so-do-nhiet.png)</div>
+        </div>
         <div class="card-title">Sơ đồ Đo nhiệt độ</div>
     </div>
 
@@ -168,16 +231,18 @@
 </div>
 
 <footer>
-    <p>Designer Vietnam | Hệ thống quản lý kỹ thuật IDI</p>
+    Designer Vietnam | Hệ thống quản lý kỹ thuật IDI Factory Automation
 </footer>
 
 <script>
+    // Hàm tìm kiếm thông minh
     function filterCards() {
         let input = document.getElementById('searchInput').value.toUpperCase();
         let cards = document.getElementsByClassName('card');
         for (let i = 0; i < cards.length; i++) {
-            let title = cards[i].innerText.toUpperCase();
-            if (title.indexOf(input) > -1) {
+            // Lấy toàn bộ văn bản trong thẻ để tìm kiếm
+            let content = cards[i].innerText.toUpperCase();
+            if (content.indexOf(input) > -1) {
                 cards[i].style.display = "";
             } else {
                 cards[i].style.display = "none";
