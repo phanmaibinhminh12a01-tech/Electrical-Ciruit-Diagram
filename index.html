@@ -1,487 +1,755 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CyberChip – 24/7 Cybersecurity Operation Center</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+<title>IDI Corporation — Hệ thống tra cứu kỹ thuật</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg-deep:   #040d2b;
-    --bg-mid:    #071540;
-    --accent1:   #00e5ff;
-    --accent2:   #0077ff;
-    --accent3:   #00ffb3;
-    --text:      #cce8ff;
-    --text-dim:  #7ba5cc;
-    --card-bg:   rgba(0,119,255,0.08);
-    --card-border: rgba(0,229,255,0.15);
-  }
-
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #070b14;
+    --bg2: #0d1526;
+    --bg3: #111d35;
+    --border: rgba(255,255,255,0.08);
+    --border-hover: rgba(255,255,255,0.16);
+    --text: #e8edf5;
+    --text-muted: #6b7fa3;
+    --text-dim: #3d4f6e;
+    --accent: #3b82f6;
+    --accent-glow: rgba(59,130,246,0.25);
+    --accent2: #06b6d4;
+    --gold: #f59e0b;
+    --card-bg: rgba(13,21,38,0.85);
+    --card-border: rgba(255,255,255,0.07);
+    --font: 'Be Vietnam Pro', sans-serif;
+    --radius: 16px;
+    --transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
 
   html { scroll-behavior: smooth; }
 
   body {
-    font-family: 'Exo 2', sans-serif;
-    background: var(--bg-deep);
+    background: var(--bg);
     color: var(--text);
+    font-family: var(--font);
+    min-height: 100vh;
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
   }
 
-  /* ── Stars background ── */
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
+  /* ── BACKGROUND ── */
+  .bg-wrap {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    overflow: hidden;
+  }
+  .bg-spotlight {
+    position: absolute;
+    top: -10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 900px; height: 700px;
+    background: radial-gradient(ellipse at 50% 0%, rgba(59,130,246,0.18) 0%, rgba(6,182,212,0.08) 40%, transparent 70%);
+  }
+  .bg-grid {
+    position: absolute; inset: 0;
     background-image:
-      radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,.6) 0%, transparent 100%),
-      radial-gradient(1px 1px at 30% 60%, rgba(255,255,255,.4) 0%, transparent 100%),
-      radial-gradient(1px 1px at 55% 15%, rgba(255,255,255,.5) 0%, transparent 100%),
-      radial-gradient(1px 1px at 75% 80%, rgba(255,255,255,.3) 0%, transparent 100%),
-      radial-gradient(1px 1px at 90% 40%, rgba(255,255,255,.6) 0%, transparent 100%),
-      radial-gradient(1px 1px at 20% 85%, rgba(255,255,255,.4) 0%, transparent 100%),
-      radial-gradient(1px 1px at 65% 50%, rgba(255,255,255,.5) 0%, transparent 100%),
-      radial-gradient(1px 1px at 40% 35%, rgba(255,255,255,.3) 0%, transparent 100%),
-      radial-gradient(1px 1px at 85% 10%, rgba(255,255,255,.6) 0%, transparent 100%),
-      radial-gradient(1px 1px at 50% 90%, rgba(255,255,255,.4) 0%, transparent 100%);
-    pointer-events: none; z-index: 0;
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 20%, transparent 80%);
+  }
+  .bg-noise {
+    position: absolute; inset: 0;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
   }
 
   /* ── NAV ── */
   nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     display: flex; align-items: center; justify-content: space-between;
-    padding: 18px 60px;
-    background: rgba(4,13,43,.85);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(0,229,255,.1);
+    padding: 0 40px;
+    height: 60px;
+    background: rgba(7,11,20,0.7);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
   }
-  .logo {
+  .nav-logo {
     display: flex; align-items: center; gap: 10px;
-    font-family: 'Orbitron', monospace; font-weight: 800;
-    font-size: 1.2rem; color: var(--accent1); text-decoration: none;
+    font-weight: 700; font-size: 15px; color: var(--text);
+    letter-spacing: -0.3px;
+    text-decoration: none;
   }
-  .logo-icon {
-    width: 36px; height: 36px;
-    background: linear-gradient(135deg, var(--accent2), var(--accent1));
+  .nav-logo-icon {
+    width: 28px; height: 28px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
     border-radius: 8px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 1.1rem;
+    font-size: 13px; font-weight: 800; color: #fff;
   }
-  .nav-links { display: flex; gap: 36px; list-style: none; }
-  .nav-links a {
-    color: var(--text-dim); text-decoration: none; font-size: .9rem;
-    font-weight: 400; transition: color .2s;
+  .nav-center {
+    display: flex; align-items: center; gap: 6px;
   }
-  .nav-links a:hover { color: var(--accent1); }
-  .btn-contact {
-    background: linear-gradient(90deg, var(--accent2), var(--accent1));
-    color: #fff; border: none; padding: 10px 24px;
-    border-radius: 50px; font-family: 'Exo 2', sans-serif;
-    font-weight: 600; font-size: .9rem; cursor: pointer;
-    box-shadow: 0 0 20px rgba(0,229,255,.3);
-    transition: box-shadow .3s;
+  .nav-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+    animation: pulse 2s ease-in-out infinite;
   }
-  .btn-contact:hover { box-shadow: 0 0 32px rgba(0,229,255,.6); }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.6;transform:scale(0.8)} }
+  .nav-status { font-size: 12px; color: var(--text-muted); }
+  .nav-btn {
+    padding: 7px 18px;
+    background: var(--accent);
+    color: #fff;
+    border: none; border-radius: 8px;
+    font-family: var(--font); font-size: 13px; font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+  .nav-btn:hover { background: #2563eb; transform: translateY(-1px); }
 
   /* ── HERO ── */
   .hero {
-    min-height: 100vh;
-    display: grid; grid-template-columns: 1fr 1fr;
-    align-items: center;
-    padding: 120px 60px 80px;
-    position: relative; overflow: hidden;
-    background: radial-gradient(ellipse 80% 60% at 70% 50%, rgba(0,119,255,.18) 0%, transparent 70%),
-                radial-gradient(ellipse 50% 80% at 0% 50%, rgba(0,229,255,.07) 0%, transparent 70%);
-  }
-  .hero-text h1 {
-    font-family: 'Orbitron', monospace; font-weight: 800;
-    font-size: clamp(2rem, 3.5vw, 3rem);
-    line-height: 1.2; color: #fff;
-    animation: fadeUp .8s ease both;
-  }
-  .hero-text h1 span { color: var(--accent1); }
-  .hero-text p {
-    margin-top: 20px; color: var(--text-dim); font-size: .95rem;
-    line-height: 1.7; max-width: 420px;
-    animation: fadeUp .8s .15s ease both;
-  }
-  .hero-btns {
-    display: flex; gap: 16px; margin-top: 36px;
-    animation: fadeUp .8s .3s ease both;
-  }
-  .btn-primary {
-    background: linear-gradient(90deg, var(--accent2), var(--accent1));
-    color: #fff; padding: 13px 30px; border-radius: 50px;
-    font-weight: 600; font-size: .95rem; cursor: pointer;
-    border: none; box-shadow: 0 0 24px rgba(0,229,255,.35);
-    transition: transform .2s, box-shadow .2s;
-  }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 40px rgba(0,229,255,.55); }
-  .btn-outline {
-    background: transparent;
-    color: var(--accent1); padding: 13px 30px; border-radius: 50px;
-    font-weight: 600; font-size: .95rem; cursor: pointer;
-    border: 1.5px solid var(--accent1);
-    transition: background .2s, color .2s;
-  }
-  .btn-outline:hover { background: rgba(0,229,255,.1); }
-
-  /* Hero visual */
-  .hero-visual {
-    display: flex; justify-content: center; align-items: center;
-    position: relative; animation: fadeUp .8s .2s ease both;
-  }
-  .shield-wrap {
-    width: 340px; height: 340px; position: relative;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .shield-wrap::before {
-    content: '';
-    position: absolute; inset: -20px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(0,229,255,.15) 0%, transparent 70%);
-    animation: pulse 3s ease-in-out infinite;
-  }
-  .shield-svg {
-    width: 200px; height: 200px;
-    filter: drop-shadow(0 0 30px rgba(0,229,255,.6));
-    animation: float 4s ease-in-out infinite;
-  }
-  /* Orbiting dots */
-  .orbit {
-    position: absolute; inset: 0;
-    border-radius: 50%;
-    border: 1px dashed rgba(0,229,255,.2);
-    animation: spin 12s linear infinite;
-  }
-  .orbit::before {
-    content: '';
-    position: absolute; top: -5px; left: 50%;
-    width: 10px; height: 10px; border-radius: 50%;
-    background: var(--accent1);
-    box-shadow: 0 0 10px var(--accent1);
-    transform: translateX(-50%);
-  }
-  .orbit2 {
-    position: absolute; inset: 30px;
-    border-radius: 50%;
-    border: 1px dashed rgba(0,119,255,.25);
-    animation: spin 8s linear infinite reverse;
-  }
-  .orbit2::before {
-    content: '';
-    position: absolute; top: -5px; left: 50%;
-    width: 8px; height: 8px; border-radius: 50%;
-    background: var(--accent2);
-    box-shadow: 0 0 10px var(--accent2);
-    transform: translateX(-50%);
-  }
-  /* Floating cards */
-  .float-card {
-    position: absolute;
-    background: rgba(7,21,64,.85);
-    border: 1px solid rgba(0,229,255,.2);
-    border-radius: 12px; padding: 10px 16px;
-    font-size: .78rem; color: var(--text-dim);
-    backdrop-filter: blur(8px);
-    white-space: nowrap;
-  }
-  .float-card .val { color: var(--accent3); font-weight: 600; font-size: 1rem; }
-  .fc1 { top: 20px; left: -20px; animation: float 3s ease-in-out infinite; }
-  .fc2 { bottom: 30px; right: -30px; animation: float 3.5s .5s ease-in-out infinite; }
-
-  /* ── PARTNERS ── */
-  .partners {
-    padding: 70px 60px;
+    position: relative; z-index: 1;
+    padding-top: 130px;
     text-align: center;
-    background: linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-mid) 100%);
   }
-  .section-tag {
-    font-family: 'Orbitron', monospace; font-size: .7rem;
-    letter-spacing: .2em; color: var(--accent1); text-transform: uppercase;
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 5px 14px;
+    background: rgba(59,130,246,0.1);
+    border: 1px solid rgba(59,130,246,0.25);
+    border-radius: 100px;
+    font-size: 12px; font-weight: 500;
+    color: var(--accent2);
+    margin-bottom: 24px;
+    letter-spacing: 0.3px;
+  }
+  .hero-badge-dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--accent2);
+    box-shadow: 0 0 6px var(--accent2);
+  }
+  .hero-title {
+    font-size: clamp(52px, 8vw, 96px);
+    font-weight: 800;
+    letter-spacing: -3px;
+    line-height: 1;
+    background: linear-gradient(180deg, #ffffff 0%, rgba(255,255,255,0.55) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 32px;
+  }
+
+  /* ── TỦ SWITCHER ── */
+  .cabinet-switcher {
+    display: inline-flex; align-items: center; gap: 20px;
     margin-bottom: 12px;
   }
-  .section-title {
-    font-family: 'Orbitron', monospace; font-size: clamp(1.4rem, 2.5vw, 2rem);
-    font-weight: 700; color: #fff; margin-bottom: 44px;
+  .switch-btn {
+    width: 36px; height: 36px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border-hover);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--text-muted);
+    font-size: 16px;
+    user-select: none;
   }
-  .partners-grid {
-    display: flex; justify-content: center; gap: 24px; flex-wrap: wrap;
+  .switch-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: var(--text);
+    transform: scale(1.05);
   }
-  .partner-card {
-    width: 90px; height: 90px;
+  .cabinet-name {
+    font-size: clamp(15px, 2.5vw, 18px);
+    font-weight: 500;
+    color: var(--text-muted);
+    min-width: 280px;
+    transition: all 0.3s;
+  }
+  .cabinet-name strong {
+    color: var(--text);
+    font-weight: 700;
+  }
+  .cabinet-dots {
+    display: flex; gap: 7px; justify-content: center;
+    margin-bottom: 60px;
+    margin-top: 10px;
+  }
+  .cabinet-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--text-dim);
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+  .cabinet-dot.active {
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+    width: 20px; border-radius: 3px;
+  }
+
+  /* ── CARDS SECTION ── */
+  .cards-section {
+    position: relative; z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    padding: 0 20px 80px;
+    min-height: 480px;
+    perspective: 1200px;
+  }
+
+  .card {
+    position: relative;
     background: var(--card-bg);
     border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    backdrop-filter: blur(20px);
+    cursor: pointer;
+    transition: var(--transition);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 60%);
+    pointer-events: none;
+    border-radius: inherit;
+  }
+
+  /* Trạng thái: ô giữa (active) */
+  .card.center {
+    width: 420px; height: 400px;
+    z-index: 10;
+    transform: translateX(0) scale(1) rotateY(0deg);
+    border-color: rgba(59,130,246,0.2);
+    box-shadow: 0 0 60px rgba(59,130,246,0.12), 0 30px 80px rgba(0,0,0,0.5);
+  }
+  /* Ô trái */
+  .card.left {
+    width: 300px; height: 340px;
+    z-index: 5;
+    transform: translateX(60px) scale(0.88) rotateY(8deg);
+    opacity: 0.65;
+    order: -1;
+  }
+  /* Ô phải */
+  .card.right {
+    width: 300px; height: 340px;
+    z-index: 5;
+    transform: translateX(-60px) scale(0.88) rotateY(-8deg);
+    opacity: 0.65;
+  }
+  .card.left:hover, .card.right:hover {
+    opacity: 0.85;
+    border-color: var(--border-hover);
+  }
+
+  /* ── NỘI DUNG CARD ── */
+  .card-header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .card-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px;
+    flex-shrink: 0;
+  }
+  .card-icon.blue { background: rgba(59,130,246,0.15); }
+  .card-icon.cyan { background: rgba(6,182,212,0.15); }
+  .card-icon.amber { background: rgba(245,158,11,0.15); }
+  .card-title { font-size: 14px; font-weight: 600; color: var(--text); }
+  .card-sub { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
+
+  .card-body { padding: 20px 24px; flex: 1; }
+
+  /* Card sơ đồ mạch */
+  .diagram-wrap {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    height: 240px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+  .diagram-placeholder {
+    font-size: 36px; opacity: 0.2;
+  }
+  .diagram-text {
+    font-size: 13px; color: var(--text-dim);
+  }
+  .zoom-controls {
+    position: absolute; bottom: 10px; right: 10px;
+    display: flex; gap: 6px;
+  }
+  .zoom-btn {
+    width: 30px; height: 30px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid var(--border-hover);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 15px; color: var(--text-muted);
+    transition: all 0.2s;
+    user-select: none;
+  }
+  .zoom-btn:hover { background: rgba(255,255,255,0.12); color: var(--text); }
+
+  /* Card thông số */
+  .spec-table { width: 100%; border-collapse: collapse; }
+  .spec-table tr { border-bottom: 1px solid var(--border); }
+  .spec-table tr:last-child { border-bottom: none; }
+  .spec-table td {
+    padding: 9px 0;
+    font-size: 13px;
+  }
+  .spec-table td:first-child { color: var(--text-muted); width: 55%; }
+  .spec-table td:last-child { color: var(--text); font-weight: 600; text-align: right; }
+  .spec-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 11px; font-weight: 600;
+  }
+  .spec-badge.green { background: rgba(34,197,94,0.15); color: #4ade80; }
+  .spec-badge.amber { background: rgba(245,158,11,0.15); color: #fbbf24; }
+
+  /* Card nguyên lý */
+  .principle-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .principle-item {
+    display: flex; gap: 10px; align-items: flex-start;
+    font-size: 13px; color: var(--text-muted); line-height: 1.5;
+  }
+  .principle-num {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: rgba(59,130,246,0.15);
+    border: 1px solid rgba(59,130,246,0.3);
+    font-size: 10px; font-weight: 700; color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+  }
+
+  /* Hint bấm vào ô phụ */
+  .card-hint {
+    position: absolute; bottom: 14px; left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px; color: var(--text-dim);
+    white-space: nowrap;
+    transition: opacity 0.3s;
+  }
+  .card.center .card-hint { display: none; }
+
+  /* ── ICON ROW ── */
+  .icon-row {
+    position: relative; z-index: 1;
+    display: flex; align-items: center; justify-content: center;
+    gap: 8px;
+    padding-bottom: 80px;
+    flex-wrap: wrap;
+  }
+  .icon-item {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+  }
+  .icon-box {
+    width: 52px; height: 52px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
     border-radius: 14px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 1.6rem; transition: border-color .3s, box-shadow .3s;
+    font-size: 22px;
+    transition: all 0.2s;
     cursor: default;
   }
-  .partner-card:hover {
-    border-color: var(--accent1);
-    box-shadow: 0 0 20px rgba(0,229,255,.2);
+  .icon-box:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: var(--border-hover);
+    transform: translateY(-2px);
+  }
+  .icon-label { font-size: 11px; color: var(--text-dim); text-align: center; max-width: 70px; }
+  .icon-connector {
+    width: 30px; height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+    margin-bottom: 24px;
   }
 
-  /* ── WHO WE ARE ── */
-  .about {
-    padding: 90px 60px;
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 80px; align-items: center;
-    background: var(--bg-mid);
-  }
-  .about-img-wrap {
-    position: relative; display: flex; justify-content: center;
-  }
-  .about-img {
-    width: 280px; height: 280px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent2) 0%, #0a2a6e 100%);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 7rem;
-    border: 3px solid rgba(0,229,255,.3);
-    box-shadow: 0 0 60px rgba(0,119,255,.3);
-    animation: float 4s ease-in-out infinite;
-  }
-  .about-ring {
-    position: absolute; inset: -20px;
-    border-radius: 50%;
-    border: 2px solid rgba(0,229,255,.15);
-  }
-  .about-text .section-tag { text-align: left; }
-  .about-text h2 {
-    font-family: 'Orbitron', monospace; font-weight: 700;
-    font-size: clamp(1.4rem, 2.5vw, 2rem); color: #fff;
-    line-height: 1.3; margin-bottom: 20px;
-  }
-  .about-text p { color: var(--text-dim); line-height: 1.8; font-size: .93rem; margin-bottom: 24px; }
-  .check-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
-  .check-list li {
-    display: flex; align-items: flex-start; gap: 10px;
-    color: var(--text-dim); font-size: .9rem; line-height: 1.6;
-  }
-  .check-list li::before {
-    content: '✦'; color: var(--accent1); flex-shrink: 0; margin-top: 2px;
-    font-size: .8rem;
-  }
-
-  /* ── SERVICES ── */
-  .services {
-    padding: 90px 60px;
-    text-align: center;
-    background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0,119,255,.12) 0%, transparent 70%),
-                var(--bg-deep);
-  }
-  .services-grid {
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 28px; margin-top: 56px;
-  }
-  .service-card {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    border-radius: 18px; padding: 36px 24px;
-    transition: transform .3s, border-color .3s, box-shadow .3s;
-    text-align: left;
-  }
-  .service-card:hover {
-    transform: translateY(-6px);
-    border-color: var(--accent1);
-    box-shadow: 0 12px 40px rgba(0,229,255,.15);
-  }
-  .service-icon {
-    width: 56px; height: 56px;
-    background: linear-gradient(135deg, rgba(0,119,255,.3), rgba(0,229,255,.2));
-    border-radius: 14px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.6rem; margin-bottom: 20px;
-    border: 1px solid rgba(0,229,255,.2);
-  }
-  .service-card h3 {
-    font-family: 'Orbitron', monospace; font-size: .85rem;
-    color: #fff; margin-bottom: 12px; font-weight: 600;
-  }
-  .service-card p { color: var(--text-dim); font-size: .85rem; line-height: 1.7; }
-  .services-btn { margin-top: 52px; }
-
-  /* ── FOOTER ── */
-  footer {
-    padding: 36px 60px;
-    border-top: 1px solid rgba(0,229,255,.1);
-    display: flex; justify-content: space-between; align-items: center;
-    background: var(--bg-deep);
-    color: var(--text-dim); font-size: .85rem;
-  }
-
-  /* ── ANIMATIONS ── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(28px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes float {
-    0%,100% { transform: translateY(0); }
-    50%      { transform: translateY(-14px); }
-  }
-  @keyframes pulse {
-    0%,100% { transform: scale(1); opacity: .6; }
-    50%      { transform: scale(1.08); opacity: 1; }
-  }
-  @keyframes spin {
-    from { transform: rotate(0deg); }
-    to   { transform: rotate(360deg); }
-  }
+  /* ── FADE TRANSITION ── */
+  .fade-out { opacity: 0; transform: translateY(6px); }
+  .fade-in { transition: opacity 0.3s, transform 0.3s; }
 
   /* ── RESPONSIVE ── */
-  @media (max-width: 900px) {
-    nav { padding: 16px 24px; }
-    .nav-links { display: none; }
-    .hero, .about { grid-template-columns: 1fr; padding: 100px 24px 60px; gap: 40px; }
-    .hero-visual { order: -1; }
-    .services { padding: 60px 24px; }
-    .services-grid { grid-template-columns: 1fr 1fr; }
-    .partners { padding: 50px 24px; }
-    footer { flex-direction: column; gap: 12px; text-align: center; padding: 24px; }
-  }
-  @media (max-width: 500px) {
-    .services-grid { grid-template-columns: 1fr; }
-    .shield-wrap { width: 240px; height: 240px; }
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .hero { padding-top: 100px; }
+    .cards-section {
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      perspective: none;
+    }
+    .card.center, .card.left, .card.right {
+      width: 100%; max-width: 380px; height: auto;
+      transform: none !important;
+      opacity: 1 !important;
+      rotateY: 0 !important;
+    }
+    .card.center { order: 0; }
+    .card.left { order: 1; }
+    .card.right { order: 2; }
+    .card-hint { display: none !important; }
   }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
+<!-- Background -->
+<div class="bg-wrap">
+  <div class="bg-spotlight"></div>
+  <div class="bg-grid"></div>
+  <div class="bg-noise"></div>
+</div>
+
+<!-- Navbar -->
 <nav>
-  <a href="#" class="logo">
-    <div class="logo-icon">🛡</div>
-    CyberChip
+  <a class="nav-logo" href="#">
+    <div class="nav-logo-icon">I</div>
+    IDI Corporation
   </a>
-  <ul class="nav-links">
-    <li><a href="#">Home</a></li>
-    <li><a href="#">About us</a></li>
-    <li><a href="#">Services</a></li>
-    <li><a href="#">Pricing</a></li>
-    <li><a href="#">Team</a></li>
-  </ul>
-  <button class="btn-contact">Contact us</button>
+  <div class="nav-center">
+    <div class="nav-dot"></div>
+    <span class="nav-status">Hệ thống đang hoạt động</span>
+  </div>
+  <a class="nav-btn" href="#">Tra cứu tủ</a>
 </nav>
 
-<!-- HERO -->
+<!-- Hero -->
 <section class="hero">
-  <div class="hero-text">
-    <h1>24/7 Cybersecurity<br><span>Operation Center</span></h1>
-    <p>Dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Protect your assets with enterprise-grade security.</p>
-    <div class="hero-btns">
-      <button class="btn-primary">Get started</button>
-      <button class="btn-outline">Contact us</button>
-    </div>
+  <div class="hero-badge">
+    <div class="hero-badge-dot"></div>
+    Hệ thống tra cứu kỹ thuật
   </div>
+  <h1 class="hero-title">IDI Corporation</h1>
 
-  <div class="hero-visual">
-    <div class="shield-wrap">
-      <div class="orbit"></div>
-      <div class="orbit2"></div>
-      <svg class="shield-svg" viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="sg" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#0077ff"/>
-            <stop offset="100%" stop-color="#00e5ff"/>
-          </linearGradient>
-          <linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="rgba(0,229,255,0.3)"/>
-            <stop offset="100%" stop-color="rgba(0,119,255,0.1)"/>
-          </linearGradient>
-        </defs>
-        <!-- Shield body -->
-        <path d="M100 10 L180 45 L180 120 Q180 185 100 225 Q20 185 20 120 L20 45 Z"
-              fill="url(#lg)" stroke="url(#sg)" stroke-width="2.5"/>
-        <!-- Inner shield -->
-        <path d="M100 30 L162 58 L162 118 Q162 172 100 205 Q38 172 38 118 L38 58 Z"
-              fill="rgba(0,119,255,0.15)" stroke="rgba(0,229,255,0.3)" stroke-width="1"/>
-        <!-- Lock body -->
-        <rect x="74" y="118" width="52" height="44" rx="8"
-              fill="url(#sg)" opacity=".9"/>
-        <!-- Lock shackle -->
-        <path d="M84 118 L84 102 Q84 82 100 82 Q116 82 116 102 L116 118"
-              fill="none" stroke="url(#sg)" stroke-width="7" stroke-linecap="round"/>
-        <!-- Keyhole -->
-        <circle cx="100" cy="137" r="7" fill="rgba(4,13,43,.8)"/>
-        <rect x="97" y="140" width="6" height="10" rx="2" fill="rgba(4,13,43,.8)"/>
-      </svg>
-      <div class="float-card fc1"><div class="val">99.9%</div>Uptime SLA</div>
-      <div class="float-card fc2"><div class="val">+2.4k</div>Threats Blocked Today</div>
+  <!-- Tủ switcher -->
+  <div class="cabinet-switcher">
+    <div class="switch-btn" id="prevBtn">&#8592;</div>
+    <div class="cabinet-name" id="cabinetName">
+      <strong id="cabinetCode">Tủ MCC-01</strong>
+      <span id="cabinetArea"> — Khu vực xử lý</span>
     </div>
+    <div class="switch-btn" id="nextBtn">&#8594;</div>
   </div>
+  <div class="cabinet-dots" id="cabinetDots"></div>
 </section>
 
-<!-- PARTNERS -->
-<section class="partners">
-  <div class="section-tag">Partners</div>
-  <h2 class="section-title">We're Working With</h2>
-  <div class="partners-grid">
-    <div class="partner-card">🔷</div>
-    <div class="partner-card">⚙️</div>
-    <div class="partner-card">🔺</div>
-    <div class="partner-card">🛒</div>
-    <div class="partner-card">💠</div>
-    <div class="partner-card">🔐</div>
+<!-- 3 Cards -->
+<section class="cards-section" id="cardsSection">
+
+  <!-- Ô TRÁI: Thông số kỹ thuật -->
+  <div class="card left" id="cardLeft" onclick="selectCard('left')">
+    <div class="card-header">
+      <div class="card-icon cyan">⚡</div>
+      <div>
+        <div class="card-title">Thông số kỹ thuật</div>
+        <div class="card-sub" id="leftSub">Tủ MCC-01</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <table class="spec-table" id="specTable">
+        <tr><td>Điện áp nguồn</td><td>380V / 3 pha</td></tr>
+        <tr><td>Dòng định mức</td><td>250A</td></tr>
+        <tr><td>Công suất</td><td>75 kW</td></tr>
+        <tr><td>Tần số</td><td>50 Hz</td></tr>
+        <tr><td>IP bảo vệ</td><td>IP54</td></tr>
+        <tr><td>Trạng thái</td><td><span class="spec-badge green">Hoạt động</span></td></tr>
+      </table>
+    </div>
+    <div class="card-hint">Bấm để xem chi tiết</div>
   </div>
+
+  <!-- Ô GIỮA: Sơ đồ mạch điện -->
+  <div class="card center" id="cardCenter" onclick="selectCard('center')">
+    <div class="card-header">
+      <div class="card-icon blue">📋</div>
+      <div>
+        <div class="card-title">Sơ đồ mạch điện</div>
+        <div class="card-sub" id="centerSub">Tủ MCC-01 — Khu vực xử lý</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="diagram-wrap" id="diagramWrap">
+        <div class="diagram-placeholder">🗂</div>
+        <div class="diagram-text" id="diagramText">Sơ đồ mạch điện MCC-01</div>
+        <div class="zoom-controls">
+          <div class="zoom-btn" onclick="zoom(1, event)">+</div>
+          <div class="zoom-btn" onclick="zoom(-1, event)">−</div>
+          <div class="zoom-btn" onclick="resetZoom(event)" style="font-size:12px;">↺</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ô PHẢI: Nguyên lý hoạt động -->
+  <div class="card right" id="cardRight" onclick="selectCard('right')">
+    <div class="card-header">
+      <div class="card-icon amber">⚙️</div>
+      <div>
+        <div class="card-title">Nguyên lý hoạt động</div>
+        <div class="card-sub" id="rightSub">Tủ MCC-01</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <ul class="principle-list" id="principleList">
+        <li class="principle-item">
+          <div class="principle-num">1</div>
+          <span>Nguồn 3 pha 380V cấp vào qua MCCB tổng, qua hệ thống thanh cái đồng.</span>
+        </li>
+        <li class="principle-item">
+          <div class="principle-num">2</div>
+          <span>Biến tần điều khiển tốc độ motor bơm theo tín hiệu 4-20mA từ PLC.</span>
+        </li>
+        <li class="principle-item">
+          <div class="principle-num">3</div>
+          <span>Relay bảo vệ quá tải, thấp áp ngắt mạch tự động khi có sự cố.</span>
+        </li>
+        <li class="principle-item">
+          <div class="principle-num">4</div>
+          <span>Tín hiệu trạng thái phản hồi về HMI qua module I/O Siemens ET200.</span>
+        </li>
+      </ul>
+    </div>
+    <div class="card-hint">Bấm để xem chi tiết</div>
+  </div>
+
 </section>
 
-<!-- ABOUT -->
-<section class="about">
-  <div class="about-img-wrap">
-    <div class="about-ring"></div>
-    <div class="about-img">👩‍💻</div>
+<!-- Icon row -->
+<div class="icon-row">
+  <div class="icon-item">
+    <div class="icon-box">⚡</div>
+    <div class="icon-label">Điện động lực</div>
   </div>
-  <div class="about-text">
-    <div class="section-tag">Who We Are</div>
-    <h2>Reduce Risk of Your Workflow — Be Productive</h2>
-    <p>Aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-    <ul class="check-list">
-      <li>Aute irure dolor in reprehenderit in voluptate velit esse mollitia</li>
-      <li>Dolore eu fugiat nulla pariatur excepteur sint occaecat distinctio</li>
-      <li>Non proident, sunt in culpa qui officia deserunt mollit assuma</li>
-      <li>Laborum incidunt ut labore et dolore magnam rugiat occaecat</li>
-    </ul>
+  <div class="icon-connector"></div>
+  <div class="icon-item">
+    <div class="icon-box">🖥</div>
+    <div class="icon-label">Điều khiển PLC</div>
   </div>
-</section>
+  <div class="icon-connector"></div>
+  <div class="icon-item">
+    <div class="icon-box">📊</div>
+    <div class="icon-label">HMI / SCADA</div>
+  </div>
+  <div class="icon-connector"></div>
+  <div class="icon-item">
+    <div class="icon-box">🔧</div>
+    <div class="icon-label">Bảo trì</div>
+  </div>
+  <div class="icon-connector"></div>
+  <div class="icon-item">
+    <div class="icon-box">📁</div>
+    <div class="icon-label">Tài liệu kỹ thuật</div>
+  </div>
+</div>
 
-<!-- SERVICES -->
-<section class="services">
-  <div class="section-tag">What We Do</div>
-  <h2 class="section-title">Complete And Effective Protection<br>For Your Home And Office</h2>
-  <div class="services-grid">
-    <div class="service-card">
-      <div class="service-icon">📷</div>
-      <h3>Camera Surveillance</h3>
-      <p>Dolor in reprehenderit aelore eu fugiat nulla non proident sunt in laborum incidun.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-icon">📁</div>
-      <h3>Folder Security</h3>
-      <p>Dolor in reprehenderit aelore eu fugiat nulla non proident sunt in laborum incidun.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-icon">🔒</div>
-      <h3>End to End Encryption</h3>
-      <p>Dolor in reprehenderit aelore eu fugiat nulla non proident sunt in laborum incidun.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-icon">🖐️</div>
-      <h3>Finger Print Security</h3>
-      <p>Dolor in reprehenderit aelore eu fugiat nulla non proident sunt in laborum incidun.</p>
-    </div>
-  </div>
-  <div class="services-btn">
-    <button class="btn-primary">Get started</button>
-  </div>
-</section>
+<script>
+// ── DỮ LIỆU 3 TỦ MẪU ──
+const cabinets = [
+  {
+    code: 'Tủ MCC-01',
+    area: 'Khu vực xử lý',
+    specs: [
+      ['Điện áp nguồn', '380V / 3 pha'],
+      ['Dòng định mức', '250A'],
+      ['Công suất', '75 kW'],
+      ['Tần số', '50 Hz'],
+      ['IP bảo vệ', 'IP54'],
+      ['Trạng thái', '<span class="spec-badge green">Hoạt động</span>'],
+    ],
+    diagram: 'Sơ đồ mạch điện MCC-01',
+    principles: [
+      'Nguồn 3 pha 380V cấp vào qua MCCB tổng, qua hệ thống thanh cái đồng.',
+      'Biến tần điều khiển tốc độ motor bơm theo tín hiệu 4-20mA từ PLC.',
+      'Relay bảo vệ quá tải, thấp áp ngắt mạch tự động khi có sự cố.',
+      'Tín hiệu trạng thái phản hồi về HMI qua module I/O Siemens ET200.',
+    ]
+  },
+  {
+    code: 'Tủ MCC-02',
+    area: 'Khu vực đóng gói',
+    specs: [
+      ['Điện áp nguồn', '220V / 1 pha'],
+      ['Dòng định mức', '100A'],
+      ['Công suất', '22 kW'],
+      ['Tần số', '50 Hz'],
+      ['IP bảo vệ', 'IP55'],
+      ['Trạng thái', '<span class="spec-badge amber">Bảo trì</span>'],
+    ],
+    diagram: 'Sơ đồ mạch điện MCC-02',
+    principles: [
+      'Nguồn 1 pha 220V cấp vào qua CB tổng 100A, phân phối đến 6 nhóm tải.',
+      'Contactor điều khiển băng tải đóng gói qua bộ timer ON-DELAY 5 giây.',
+      'Cảm biến quang phát hiện sản phẩm gửi tín hiệu về PLC Mitsubishi FX5U.',
+      'Hệ thống dừng khẩn cấp E-Stop nối chuỗi, dừng toàn bộ dây chuyền.',
+    ]
+  },
+  {
+    code: 'Tủ MCC-03',
+    area: 'Khu vực làm lạnh',
+    specs: [
+      ['Điện áp nguồn', '380V / 3 pha'],
+      ['Dòng định mức', '400A'],
+      ['Công suất', '132 kW'],
+      ['Tần số', '50 Hz'],
+      ['IP bảo vệ', 'IP65'],
+      ['Trạng thái', '<span class="spec-badge green">Hoạt động</span>'],
+    ],
+    diagram: 'Sơ đồ mạch điện MCC-03',
+    principles: [
+      'Máy nén lạnh Copeland 132kW khởi động sao-tam giác giảm dòng mở máy.',
+      'Thermostat điều khiển nhiệt độ kho lạnh duy trì -18°C ±2°C liên tục.',
+      'Quạt dàn lạnh hoạt động độc lập, ngắt tự động khi xả đá theo chu kỳ.',
+      'Bảo vệ áp suất cao/thấp, quá nhiệt gas qua các pressostat Danfoss.',
+    ]
+  }
+];
 
-<!-- FOOTER -->
-<footer>
-  <div>© 2026 CyberChip. All rights reserved.</div>
-  <div>Built with ❤️ for cybersecurity</div>
-</footer>
+let current = 0;
+let activeCard = 'center'; // 'left', 'center', 'right'
 
+// ── TẠO DOTS ──
+function buildDots() {
+  const wrap = document.getElementById('cabinetDots');
+  wrap.innerHTML = '';
+  cabinets.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'cabinet-dot' + (i === current ? ' active' : '');
+    d.onclick = () => goTo(i);
+    wrap.appendChild(d);
+  });
+}
+
+// ── CẬP NHẬT NỘI DUNG ──
+function updateContent(animate = true) {
+  const cab = cabinets[current];
+
+  const changeFn = () => {
+    // Hero
+    document.getElementById('cabinetCode').textContent = cab.code;
+    document.getElementById('cabinetArea').textContent = ' — ' + cab.area;
+
+    // Card subs
+    document.getElementById('leftSub').textContent = cab.code;
+    document.getElementById('centerSub').textContent = cab.code + ' — ' + cab.area;
+    document.getElementById('rightSub').textContent = cab.code;
+
+    // Sơ đồ
+    document.getElementById('diagramText').textContent = 'Sơ đồ mạch điện ' + cab.code.replace('Tủ ', '');
+
+    // Thông số
+    const table = document.getElementById('specTable');
+    table.innerHTML = cab.specs.map(([k,v]) =>
+      `<tr><td>${k}</td><td>${v}</td></tr>`
+    ).join('');
+
+    // Nguyên lý
+    const list = document.getElementById('principleList');
+    list.innerHTML = cab.principles.map((p, i) =>
+      `<li class="principle-item">
+        <div class="principle-num">${i+1}</div>
+        <span>${p}</span>
+      </li>`
+    ).join('');
+
+    // Dots
+    document.querySelectorAll('.cabinet-dot').forEach((d,i) => {
+      d.classList.toggle('active', i === current);
+    });
+  };
+
+  if (animate) {
+    const name = document.getElementById('cabinetName');
+    name.style.opacity = '0'; name.style.transform = 'translateY(6px)';
+    setTimeout(() => {
+      changeFn();
+      name.style.transition = 'opacity 0.3s, transform 0.3s';
+      name.style.opacity = '1'; name.style.transform = 'translateY(0)';
+    }, 200);
+  } else {
+    changeFn();
+  }
+}
+
+function goTo(idx) {
+  current = (idx + cabinets.length) % cabinets.length;
+  updateContent(true);
+}
+
+document.getElementById('prevBtn').onclick = () => goTo(current - 1);
+document.getElementById('nextBtn').onclick = () => goTo(current + 1);
+
+// ── CHỌN CARD ──
+function selectCard(which) {
+  if (which === activeCard) return;
+
+  const cardLeft   = document.getElementById('cardLeft');
+  const cardCenter = document.getElementById('cardCenter');
+  const cardRight  = document.getElementById('cardRight');
+
+  // Xác định card mới ở vị trí nào
+  const cards = { left: cardLeft, center: cardCenter, right: cardRight };
+  const positions = ['left', 'center', 'right'];
+
+  // Map vị trí mới
+  let newPos = {};
+  if (which === 'left') {
+    newPos = { left: 'center', center: 'right', right: 'left' };
+  } else if (which === 'right') {
+    newPos = { left: 'right', center: 'left', right: 'center' };
+  }
+
+  // Áp dụng class mới
+  Object.entries(newPos).forEach(([card, pos]) => {
+    cards[card].className = 'card ' + pos;
+  });
+
+  activeCard = 'center'; // card được bấm luôn trở thành center
+  // Sau transition, reset onclick để đúng
+  setTimeout(() => {}, 600);
+}
+
+// ── ZOOM ──
+let zoomLevel = 1;
+function zoom(dir, e) {
+  e.stopPropagation();
+  zoomLevel = Math.min(3, Math.max(0.5, zoomLevel + dir * 0.25));
+  const wrap = document.getElementById('diagramWrap');
+  wrap.style.transform = `scale(${zoomLevel})`;
+  wrap.style.transition = 'transform 0.2s';
+}
+function resetZoom(e) {
+  e.stopPropagation();
+  zoomLevel = 1;
+  const wrap = document.getElementById('diagramWrap');
+  wrap.style.transform = 'scale(1)';
+}
+
+// ── INIT ──
+buildDots();
+updateContent(false);
+</script>
 </body>
 </html>
